@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+/*========= レイアウトのためのCSS ===============*/
+
+#wrapper {
+  height: 100%;
+  min-height: 100vh;
+}
+
+#wrapper p {
+  padding: 300px 0;
+  text-align: center;
+}
+
+/*========= waveを描画するエリア設定 ===============*/
+
+.wave {
+  position: relative;
+  height: 100%;
+  background: #fff;
+}
+
+.wave #waveCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.wave #waveCanvasBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
