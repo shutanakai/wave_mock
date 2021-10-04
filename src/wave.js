@@ -12,13 +12,11 @@ function init() {
   info.seconds = 0;
   info.t = 0;
   canvasList = [];
-  colorList = [];
+  colorList = ["#88CFEA", "#99E7FF", "#9CE8FF", "#88CFEA", "#C5F7FF"];
 
   canvasList.push(document.getElementById("waveCanvas"));
-  colorList.push(["#d4f1ff"]);
 
   canvasList.push(document.getElementById("waveCanvasBottom"));
-  colorList.push(["#d4f1ff"]);
 
   // 各キャンバスの初期化
   for (let canvasIndex in canvasList) {
@@ -35,7 +33,7 @@ function update() {
     canvas.width = document.documentElement.clientWidth; //Canvasのwidthをウィンドウの幅に合わせる
     canvas.height = document.documentElement.clientHeight / 4; //波の高さ
     // 各キャンバスの描画
-    draw(canvas, colorList[canvasIndex]);
+    draw(canvas, colorList);
   }
   // 共通の描画情報の更新
   info.seconds = info.seconds + 0.014;
@@ -50,29 +48,27 @@ function update() {
  * This function draws one frame of the animation, waits 20ms, and then calls
  * itself again.
  */
-function draw(canvas, color) {
+function draw(canvas, colorList) {
   // 対象のcanvasのコンテキストを取得
   const context = canvas.contextCache;
   // キャンバスの描画をクリア
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   //波の重なりを描画 drawWave(canvas, color[数字（波の数を0から数えて指定）], 透過, 波の幅のzoom,波の開始位置の遅れ, 波の低さの割合 )
-  drawWave(canvas, color[0], 0.3, 3, 0, 1.5);
-  drawWave(canvas, color[1], 0.4, 3, 100, 2);
-  drawWave(canvas, color[2], 0.5, 3, 500, 2.5);
+  if (window.innerWidth < 768) {
+    drawWave(canvas, colorList[4], 0.4, 1.5, 0, 2);
+    drawWave(canvas, colorList[3], 0.3, 2, 500, 3);
+    drawWave(canvas, colorList[2], 0.2, 3, 2500, 4);
+    drawWave(canvas, colorList[1], 0.2, 4, 2000, 5);
+    drawWave(canvas, colorList[0], 0.3, 5, 1500, 6);
+  } else {
+    drawWave(canvas, colorList[4], 0.4, 5, 0, 1.5);
+    drawWave(canvas, colorList[3], 0.3, 6, 500, 3);
+    drawWave(canvas, colorList[2], 0.2, 7, 3100, 4.5);
+    drawWave(canvas, colorList[1], 0.2, 8, 7100, 6);
+    drawWave(canvas, colorList[0], 0.3, 9, 1400, 7.5);
+  }
 }
-
-// function drawBottom(canvas, color) {
-//   // 対象のcanvasのコンテキストを取得
-//   const context = canvas.contextCache;
-//   // キャンバスの描画をクリア
-//   context.clearRect(0, 0, canvas.width, canvas.height);
-
-//   //波の重なりを描画 drawWaveBottom(canvas, color[数字（波の数を0から数えて指定）], 透過, 波の幅のzoom,波の開始位置の遅れ, 波の低さの割合 )
-//   drawWave(canvas, color[0], 0.3, 3, 0, 1.5, "bottom");
-//   drawWave(canvas, color[1], 0.4, 3, 100, 2, "bottom");
-//   drawWave(canvas, color[2], 0.5, 3, 500, 2.5, "bottom");
-// }
 
 /**
  * 波を描画
@@ -84,8 +80,8 @@ function drawWave(canvas, color, alpha, zoom, delay, heightRate) {
   context.globalAlpha = alpha;
   context.beginPath(); //パスの開始
   drawSine(canvas, info.t / 1.5, zoom, delay, heightRate);
-  context.lineTo(canvas.width + 10, canvas.height); // パスをCanvasの右下へ
-  context.lineTo(0, canvas.height); // パスをCanvasの左下へ
+  context.lineTo(canvas.width + 10, 0); // パスをCanvasの右上へ
+  context.lineTo(0, 0); // パスをCanvasの左上へ
   context.closePath(); //パスを閉じる
   context.fill(); //塗りつぶす
 }
